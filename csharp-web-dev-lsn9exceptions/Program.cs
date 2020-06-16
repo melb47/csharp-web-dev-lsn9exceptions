@@ -8,51 +8,43 @@ namespace csharp_web_dev_lsn9exceptions
     {
         static double Divide(double x, double y)
         {
-            double answer = x / y;
-            try
-            {                
+            double answer = x / y;     
                 if (y == 0)
                 {
                     throw new ArgumentOutOfRangeException("Cannot divide by zero");
                 }
-            }
-            catch(ArgumentOutOfRangeException e)
-            {
-                answer = 0;
-                Console.WriteLine(e.Message);
-            }
             return answer;
         }
 
 
         static int CheckFileExtension(string fileName)
         {
-            int points;
-            if (fileName.EndsWith(".cs"))
+            if (string.IsNullOrEmpty(fileName))
             {
-                points = 1;
+                throw new FormatException("File name must not be null or empty");
             }
-            else points = 0;
-            try
+            else if (fileName.EndsWith(".cs"))
             {
-                if (string.IsNullOrEmpty(fileName))
-                {
-                    throw new FormatException("File name must not be null or empty");
-                }
+                return 1;
             }
-            catch(FormatException fe)
+            else
             {
-                Console.WriteLine(fe.Message);
+                return 0;
             }
-            return points;
         }
 
 
         static void Main(string[] args)
         {
             // Test out your Divide() function here!
-            Console.WriteLine(Divide(10, 0));
-            Console.WriteLine(Divide(10, 3));
+            try
+            {
+                Divide(10.0, 0.0);
+            }
+            catch(ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
 
             // Test out your CheckFileExtension() function here!
@@ -64,7 +56,14 @@ namespace csharp_web_dev_lsn9exceptions
 
             foreach (KeyValuePair<string, string> a in students)
             {
-                Console.WriteLine(CheckFileExtension(a.Value));
+                try
+                {
+                    Console.WriteLine(CheckFileExtension(a.Value));
+                }
+                catch(FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
 
